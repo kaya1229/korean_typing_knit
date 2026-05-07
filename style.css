@@ -1,0 +1,66 @@
+:root {
+    --bg-color: #f4efea;
+}
+
+body {
+    margin: 0; background: var(--bg-color);
+    display: flex; flex-direction: column; align-items: center;
+    font-family: 'Noto Serif KR', serif;
+}
+
+#knit-world {
+    width: 100%; height: 60vh;
+    display: flex; justify-content: center;
+    overflow-y: auto; padding: 50px 0;
+    flex-direction: column-reverse; /* 아래서부터 쌓이게 */
+}
+
+#scarf-container {
+    width: 300px; margin: 0 auto;
+    display: flex; flex-direction: column-reverse;
+    border-bottom: 20px solid #d3c4a9; /* 대바늘 느낌 */
+}
+
+.knit-row {
+    display: flex; justify-content: center;
+    height: 35px; margin-bottom: -10px;
+    animation: stitchIn 0.5s ease-out;
+}
+
+.stitch {
+    width: 35px; height: 45px; margin: 0 1px;
+    border-radius: 10px; position: relative;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 겉뜨기 V 패턴 */
+.stitch.knit {
+    clip-path: polygon(10% 0%, 50% 100%, 90% 0%, 100% 0%, 50% 80%, 0% 0%);
+}
+
+/* 안뜨기 둥근 패턴 */
+.stitch.purl {
+    height: 25px; margin-top: 10px;
+    border-radius: 20px;
+}
+
+/* 받침 장식 (보풀) */
+.stitch.bobble::after {
+    content: ''; position: absolute; top: 10%; left: 25%;
+    width: 50%; height: 50%; background: rgba(255,255,255,0.4);
+    border-radius: 50%; filter: blur(3px);
+}
+
+.ui-panel {
+    width: 100%; max-width: 500px; padding: 20px; text-align: center;
+}
+
+textarea {
+    width: 100%; height: 80px; border: 2px solid #96897b;
+    border-radius: 10px; padding: 15px; font-size: 1.1rem; resize: none;
+}
+
+@keyframes stitchIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
