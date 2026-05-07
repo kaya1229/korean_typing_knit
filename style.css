@@ -1,66 +1,162 @@
 :root {
-    --bg-color: #f4efea;
+    --bg-sand: #f4efea;
+    --knit-beige: #e9e0d2;
+    --text-brown: #5d5343;
+    --shadow: rgba(0,0,0,0.1);
 }
 
 body {
-    margin: 0; background: var(--bg-color);
-    display: flex; flex-direction: column; align-items: center;
-    font-family: 'Noto Serif KR', serif;
+    margin: 0;
+    background-color: var(--bg-sand);
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-brown);
+    height: 100vh;
+    overflow: hidden;
 }
 
-#knit-world {
-    width: 100%; height: 60vh;
-    display: flex; justify-content: center;
-    overflow-y: auto; padding: 50px 0;
-    flex-direction: column-reverse; /* 아래서부터 쌓이게 */
+h1 {
+    margin: 20px 0 10px 0;
+    font-weight: 300;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
 }
+
+/* 목도리 베틀 영역 */
+#knit-world {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse; /* 아래서부터 위로 쌓임 */
+    align-items: center;
+    overflow-y: auto;
+    padding: 40px 0;
+    scrollbar-width: none;
+}
+#knit-world::-webkit-scrollbar { display: none; }
 
 #scarf-container {
-    width: 300px; margin: 0 auto;
-    display: flex; flex-direction: column-reverse;
-    border-bottom: 20px solid #d3c4a9; /* 대바늘 느낌 */
+    width: 320px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
 }
 
+/* 뜨개질 한 줄(글자 하나) */
 .knit-row {
-    display: flex; justify-content: center;
-    height: 35px; margin-bottom: -10px;
-    animation: stitchIn 0.5s ease-out;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 35px;
+    margin-bottom: -10px;
+    animation: stitchIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* 공통 코(Stitch) 스타일 */
 .stitch {
-    width: 35px; height: 45px; margin: 0 1px;
-    border-radius: 10px; position: relative;
-    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+    width: 35px;
+    height: 45px;
+    margin: 0 1px;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.15);
 }
 
-/* 겉뜨기 V 패턴 */
+/* 겉뜨기 (Knit) - V자 */
 .stitch.knit {
-    clip-path: polygon(10% 0%, 50% 100%, 90% 0%, 100% 0%, 50% 80%, 0% 0%);
+    clip-path: polygon(10% 0%, 50% 100%, 90% 0%, 100% 0%, 50% 85%, 0% 0%);
 }
 
-/* 안뜨기 둥근 패턴 */
+/* 안뜨기 (Purl) - 가로 둥근형 */
 .stitch.purl {
-    height: 25px; margin-top: 10px;
-    border-radius: 20px;
+    height: 25px;
+    margin-top: 10px;
+    clip-path: inset(0% 0% 0% 0% round 40%);
 }
 
 /* 받침 장식 (보풀) */
 .stitch.bobble::after {
-    content: ''; position: absolute; top: 10%; left: 25%;
-    width: 50%; height: 50%; background: rgba(255,255,255,0.4);
-    border-radius: 50%; filter: blur(3px);
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 25%;
+    width: 50%;
+    height: 40%;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    filter: blur(2px);
 }
 
+/* 띄어쓰기: 베이지색 단 */
+.divider {
+    width: 100%;
+    height: 12px;
+    background-color: var(--knit-beige);
+    margin: 8px 0;
+    border-radius: 4px;
+    box-shadow: inset 0 2px 4px var(--shadow);
+    animation: stitchIn 0.4s ease-out;
+}
+
+/* 숫자/기호: 베이지색 단추 */
+.ornament-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.ornament {
+    width: 24px;
+    height: 24px;
+    background-color: var(--knit-beige);
+    border: 2px dashed #d3c4a9;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #887a61;
+    animation: stitchIn 0.5s ease-out;
+}
+
+/* 하단 입력 UI */
 .ui-panel {
-    width: 100%; max-width: 500px; padding: 20px; text-align: center;
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 20px 40px 40px 40px;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    border-radius: 30px 30px 0 0;
+    text-align: center;
+    z-index: 10;
 }
 
 textarea {
-    width: 100%; height: 80px; border: 2px solid #96897b;
-    border-radius: 10px; padding: 15px; font-size: 1.1rem; resize: none;
+    width: 100%;
+    height: 80px;
+    border: 2px solid #e0d7cc;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 1.1rem;
+    outline: none;
+    resize: none;
+    background: #fafafa;
+    box-sizing: border-box;
+}
+
+.btn-reset {
+    margin-top: 15px;
+    background: none;
+    border: 1px solid #d3c4a9;
+    padding: 6px 18px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 @keyframes stitchIn {
-    from { transform: translateY(-20px); opacity: 0; }
+    from { transform: translateY(-30px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
