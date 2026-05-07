@@ -1,4 +1,3 @@
-// 자음 색상 팔레트 (베이지 계열 제외)
 const palette = {
     'ㄱ': '#5d737e', 'ㄴ': '#7c9082', 'ㄷ': '#a45c5c', 'ㄹ': '#6d597a',
     'ㅁ': '#455e89', 'ㅂ': '#9b89b3', 'ㅅ': '#ef5d60', 'ㅇ': '#3d405b',
@@ -15,78 +14,58 @@ let lastTextLen = 0;
 inputArea.addEventListener('input', () => {
     const currentVal = inputArea.value;
     
+    // 글자가 추가될 때만 한 땀씩 추가
     if (currentVal.length > lastTextLen) {
         const char = currentVal[currentVal.length - 1];
         
         if (char === ' ') {
-            // 1. 띄어쓰기: 베이지색 단 생성
-            const div = document.createElement('div');
-            div.className = 'divider';
-            scarf.appendChild(div);
+            // 띄어쓰기: 베이지색 안뜨기 코 하나 추가
+            addStitch(' ', true);
         } 
-        else if (!isNaN(char) && char !== ' ') {
-            // 2. 숫자: 베이지색 단추
-            const box = document.createElement('div');
-            box.className = 'ornament-box';
-            const btn = document.createElement('div');
-            btn.className = 'ornament';
-            btn.innerText = char;
-            box.appendChild(btn);
-            scarf.appendChild(box);
+        else if (!isNaN(char) && char !== ' ' && char !== '\n') {
+            // 숫자: 베이지색 겉뜨기 코 하나 추가
+            addStitch(char, true);
         }
-        else if (['.', '!', '?', ',', '~'].includes(char)) {
-            // 3. 기호: 베이지색 작은 매듭
-            const box = document.createElement('div');
-            box.className = 'ornament-box';
-            const knot = document.createElement('div');
-            knot.className = 'ornament';
-            knot.style.width = '14px';
-            knot.style.height = '14px';
-            box.appendChild(knot);
-            scarf.appendChild(box);
+        else if (char === '\n') {
+            // 줄바꿈은 무시하거나 작은 여백 처리
         }
         else {
-            // 4. 일반 글자: 한글 뜨개질 코 생성
-            createKnitStitch(char);
+            // 한글 처리: 초성, 중성, 종성을 분해하여 각각 코 생성
+            const units = Hangul.disassemble(char);
+            units.forEach((u) => {
+                addStitch(u, false, units[0]); // units[0]은 색상 기준용 초성
+            });
         }
     }
     
     lastTextLen = currentVal.length;
-    world.scrollTop = 0; // 항상 최신 코가 보이게
+    world.scrollTop = 0; // 최신 단이 항상 보이도록
 });
 
-function createKnitStitch(char) {
-    const units = Hangul.disassemble(char);
-    if (units.length === 0) return;
+function addStitch(unit, isBase, firstConsonant = null) {
+    const stitch = document.createElement('div');
+    stitch.className = 'stitch';
 
-    const row = document.createElement('div');
-    row.className = 'knit-row';
+    if (isBase) {
+        // 베이지색 바탕 코 (띄어쓰기, 숫자 등)
+        stitch.classList.add('base-color', 'purl');
+    } else {
+        // 자음/모음 색상 설정
+        // 모음일 경우 해당 글자의 초성 색상을 따라가도록 하여 통일감 부여
+        const colorKey = Hangul.isConsonant(unit) ? unit : (firstConsonant || 'ㅇ');
+        stitch.style.backgroundColor = palette[colorKey] || '#ccc';
 
-    units.forEach((u, i) => {
-        const stitch = document.createElement('div');
-        stitch.className = 'stitch';
-        
-        // 자음 기준 색상 선택
-        const base = Hangul.isConsonant(u) ? u : (units[0] || 'ㅇ');
-        stitch.style.backgroundColor = palette[base] || '#ccc';
-
-        // 모음 패턴 결정
-        if (Hangul.isVowel(u)) {
+        // 모음 패턴 결정 (양성: 겉뜨기, 음성: 안뜨기)
+        if (Hangul.isVowel(unit)) {
             const yang = ['ㅏ', 'ㅑ', 'ㅗ', 'ㅛ', 'ㅐ', 'ㅒ', 'ㅘ', 'ㅚ', 'ㅙ'];
-            stitch.classList.add(yang.includes(u) ? 'knit' : 'purl');
+            stitch.classList.add(yang.includes(unit) ? 'knit' : 'purl');
         } else {
+            // 모든 자음(초성/종성)은 겉뜨기로 통일하여 뼈대 강조
             stitch.classList.add('knit');
         }
+    }
 
-        // 받침 장식
-        if (i === units.length - 1 && units.length > 2) {
-            stitch.classList.add('bobble');
-        }
-
-        row.appendChild(stitch);
-    });
-
-    scarf.appendChild(row);
+    scarf.appendChild(stitch);
 }
 
 function resetKnit() {
