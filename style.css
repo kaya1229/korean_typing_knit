@@ -2,125 +2,68 @@
     --bg-sand: #f4efea;
     --knit-beige: #e9e0d2;
     --text-brown: #5d5343;
-    --shadow: rgba(0,0,0,0.1);
 }
 
 body {
-    margin: 0;
-    background-color: var(--bg-sand);
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-brown);
-    height: 100vh;
-    overflow: hidden;
+    margin: 0; background-color: var(--bg-sand);
+    display: flex; flex-direction: column; align-items: center;
+    height: 100vh; overflow: hidden;
 }
 
-h1 {
-    margin: 20px 0 10px 0;
-    font-weight: 300;
-    letter-spacing: 2px;
-    font-size: 1.5rem;
-}
-
-/* 목도리 베틀 영역 */
 #knit-world {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column-reverse; /* 아래서부터 위로 쌓임 */
-    align-items: center;
-    overflow-y: auto;
-    padding: 40px 0;
-    scrollbar-width: none;
+    width: 100%; flex: 1;
+    display: flex; flex-direction: column-reverse; /* 아래에서 위로 적층 */
+    align-items: center; overflow-y: auto;
+    padding: 40px 0; scrollbar-width: none;
 }
-#knit-world::-webkit-scrollbar { display: none; }
 
 #scarf-container {
-    width: 320px;
+    width: 330px; /* 한 줄에 약 10코 정도 들어가는 너비 */
     display: flex;
-    flex-direction: column-reverse;
-    gap: 2px;
+    flex-wrap: wrap; /* 가로가 차면 자동으로 다음 단 */
+    align-content: flex-start;
+    gap: 3px 1px;
+    background-color: rgba(233, 224, 210, 0.4);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* 뜨개질 한 줄(글자 하나) */
-.knit-row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 35px;
-    margin-bottom: -10px;
-    animation: stitchIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* 공통 코(Stitch) 스타일 */
+/* 통통한 실 코(Stitch) */
 .stitch {
-    width: 35px;
-    height: 45px;
-    margin: 0 1px;
-    position: relative;
-    border-radius: 8px;
-    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.15);
+    width: 28px; height: 38px;
+    margin: 1px; position: relative;
+    border-radius: 12px;
+    /* 털실의 입체감을 주는 다중 안팎 그림자 */
+    box-shadow: 
+        inset -4px -4px 7px rgba(0,0,0,0.25),
+        inset 3px 3px 7px rgba(255,255,255,0.4),
+        2px 4px 6px rgba(0,0,0,0.1);
+    animation: stitchIn 0.3s ease-out;
 }
 
-/* 겉뜨기 (Knit) - V자 */
+/* 겉뜨기 V자 형태 */
 .stitch.knit {
-    clip-path: polygon(10% 0%, 50% 100%, 90% 0%, 100% 0%, 50% 85%, 0% 0%);
+    clip-path: polygon(15% 0%, 50% 100%, 85% 0%, 100% 0%, 50% 85%, 0% 0%);
 }
 
-/* 안뜨기 (Purl) - 가로 둥근형 */
+/* 안뜨기 가로 형태 */
 .stitch.purl {
-    height: 25px;
-    margin-top: 10px;
-    clip-path: inset(0% 0% 0% 0% round 40%);
+    height: 20px; margin-top: 9px;
+    clip-path: inset(0% 0% 0% 0% round 50%);
 }
 
-/* 받침 장식 (보풀) */
-.stitch.bobble::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 25%;
-    width: 50%;
-    height: 40%;
-    background: rgba(255,255,255,0.4);
-    border-radius: 50%;
-    filter: blur(2px);
+/* 띄어쓰기/기호용 베이지 코 */
+.stitch.base-color {
+    background-color: var(--knit-beige) !important;
 }
 
-/* 띄어쓰기: 베이지색 단 */
-.divider {
-    width: 100%;
-    height: 12px;
-    background-color: var(--knit-beige);
-    margin: 8px 0;
-    border-radius: 4px;
-    box-shadow: inset 0 2px 4px var(--shadow);
-    animation: stitchIn 0.4s ease-out;
+@keyframes stitchIn {
+    from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-/* 숫자/기호: 베이지색 단추 */
-.ornament-box {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-}
-.ornament {
-    width: 24px;
-    height: 24px;
-    background-color: var(--knit-beige);
-    border: 2px dashed #d3c4a9;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 11px;
-    font-weight: bold;
-    color: #887a61;
-    animation: stitchIn 0.5s ease-out;
-}
+/* 하단 입력창 UI 디자인은 기존 스타일 유지 */
 
 /* 하단 입력 UI */
 .ui-panel {
