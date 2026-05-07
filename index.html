@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>한글 뜨개질 : Knitting Hangeul</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/hangul-js"></script>
+</head>
+<body>
+    <div id="knit-world">
+        <div id="scarf-container">
+            </div>
+    </div>
+
+    <div class="ui-panel">
+        <h1>디지털 목도리 짜기</h1>
+        <textarea id="inputArea" placeholder="글을 입력하면 목도리가 짜여집니다..."></textarea>
+        <p class="guide">자음은 색상, 모음은 패턴, 받침은 장식이 됩니다.</p>
+        <button onclick="resetKnit()">베틀 비우기</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
